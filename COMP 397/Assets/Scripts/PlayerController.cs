@@ -15,11 +15,14 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float Gravity = -30.0f;
     [SerializeField] float JumpHeight = 3.0f;
     [SerializeField] Vector3 Velocity;
+    [SerializeField] Transform Respawn;
     [Header("Ground Detection")]
     [SerializeField] Transform GroundCheck;
     [SerializeField] float GroundRadius = 0.5f;
     [SerializeField] LayerMask GroundMask;
     [SerializeField] bool IsGrounded;
+
+
 
     // Start is called before the first frame update
     void Start()
@@ -60,5 +63,15 @@ public class PlayerController : MonoBehaviour
         moveDirection = context.ReadValue<Vector2>();
         moveDirection.Normalize();
         moveDirection *= Speed;
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.tag == "Death")
+        {
+            controller.enabled = false;
+            transform.position = Respawn.position;
+            controller.enabled = true;
+        }
     }
 }
